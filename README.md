@@ -3,6 +3,24 @@ Self-Driving Car Engineer Nanodegree Program
 
 ---
 
+## Introduction
+PID (proportional integral derivative) control is one of the earlier control strategies. The input for the controller is cross track error(cte). The simulator will provide this input as the car drive along the track. Asseming the cte is the distance between center of the car to center of the road. No lookahead or lookback. The simulator also provide speed and steering angle as available input,delta time can be calculated as well. The design goal for the PID controller is to provide stable steering and speed command to simulator. The controllor should drive around the lake side circle without danger movement or accident free.    
+
+The PID as the name says, it has three parts, proportional term, integral term and derivative term. Each term has their own behaviour. 
+
+## Proportional
+The p term take cte as input, calculate the `p_error = cte`; Depend on the output range and tuning requirement, the cte range may not match the output range, we need apply a linear Coefficient Kp to the p_error. Therefore the proportional term is respons linearly to the input cte. 
+
+
+
+## Derivative
+The d 
+## Integral
+## Tuning PID Controller
+## Speed
+## Smoothing
+## Reflection
+
 ## Dependencies
 
 * cmake >= 3.5
