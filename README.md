@@ -16,18 +16,24 @@ The p term takes cte as input, calculate the `p_error = cte`; Depend on the outp
 As the picture shown, the p term intent to drive the car towards the center, but always overshooting, the car endup with oscilliting, until out of the road and lost control. It need conjunction with other terms to make it works.   
 
 ## Derivative
+
 The derivative term takes the cte rate of change as input, so it is based on `d_error = cte-previous_cte/delta_t`. 
 It also need a linear Coefficient Kd to match the signal level and turning. Conjuncion with P controller, the PD controller behaviours close to what we are looking for. For the giving new control point, the controller measures the cte change rate, and d term linearly response to the measure, the result is the car get close to the center line, but not exectlly on it.  
 <p align="center">
  <img src="./img/pd_controller.png" width="720">
 </p>
+
 ## Integral
+
 In reality, any control system will have some miss aligment, random noise and drift. The Integral term is to compensate this issue. The `i_error += cte`; We add all cte together, is the car is perfectly positioned, the cte from  left and right will cancel themself out. If the car is imperfect, we always need apply force on one side to keep it centered. So the sum of the cte can provide this input, we multiply a linear Coefficient Ki to match level and tuning. 
 Conjunction with P controller, it behaviours like this.
 <p align="center">
  <img src="./img/tuned_pi.png" width="720">
 </p>
+The car will do the oscilliting, and always on one side. 
+
 ## Tuning PID Controller
+
 If we put all three controller together, it will look like this. 
 <p align="center">
  <img src="./img/init_pid.png" width="720">
@@ -41,9 +47,14 @@ By doing a machine tuning, such as "twiddle", find the best P,I,D coefficients c
 <p align="center">
  <img src="./img/tuned_pid.png" width="720">
 </p>
+By far, all testing is done on one dimensional signal, one set of PID coefficients can do this job. But the simplified car is driven on 2 dimensional space, how can we do PID controller on different speed? 
+
 ## Speed
 
+Can a simple PID controller be tuned for variable speed? [https://www.youtube.com/watch?v=Zij2BDvc8y0&t=27s]
+
 ## Smoothing
+
 ## Reflection
 
 ## Dependencies
