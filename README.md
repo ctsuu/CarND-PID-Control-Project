@@ -4,12 +4,13 @@ Self-Driving Car Engineer Nanodegree Program
 ---
 
 ## Introduction
-PID (proportional integral derivative) control is one of the wide used control strategies in real world. The input for the controller is cross track error(cte). The simulator will provide this input as the car drive along the track. Assuming the cte is the distance between center of the car to center of the road. No lookahead or lookback. The simulator also provide speed and steering angle as available input,delta time can be calculated as well. The design goal for the PID controller is to provide stable steering and speed command to simulator. The controllor should drive around the lake side circle without danger movement or accident free.    
+PID (proportional integral derivative) control is one of the wide used control strategies in real world. The input for the controller is cross track error(cte). The simulator will provide this input as the car drive along the track. Assuming the cte is the distance between center of the car to center of the road. No lookahead or lookback. The simulator also provide speed and steering angle as available input. Delta time can be calculated as well. The design goal for the PID controller is to provide stable steering and speed command to simulator. The controllor should drive around the lake side circle without danger movement or accident free.    
 
 The PID as the name says, it has three terms, proportional term, integral term and derivative term. Each term has their own behaviour. 
 
 ## Proportional
-The p term takes cte as input, calculate the `p_error = cte`; Depend on the output range and tuning requirement, the cte range may not match the output range, we need apply a linear Coefficient Kp to the p_error. Therefore the proportional term is respons linearly to the input cte. 
+
+The proportional term takes cte as input, calculate the `p_error = cte`; Depend on the output range and tuning requirement, the cte range may not match the output range, we need apply a linear Coefficient Kp to the p_error. Therefore the proportional term is respons linearly to the input cte. 
 <p align="center">
  <img src="./img/p_controller.png" width="720">
 </p>
