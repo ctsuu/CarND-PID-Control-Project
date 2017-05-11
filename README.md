@@ -4,9 +4,9 @@ Self-Driving Car Engineer Nanodegree Program
 ---
 
 ## Introduction
-PID (proportional integral derivative) control is one of the earlier control strategies. The input for the controller is cross track error(cte). The simulator will provide this input as the car drive along the track. Asseming the cte is the distance between center of the car to center of the road. No lookahead or lookback. The simulator also provide speed and steering angle as available input,delta time can be calculated as well. The design goal for the PID controller is to provide stable steering and speed command to simulator. The controllor should drive around the lake side circle without danger movement or accident free.    
+PID (proportional integral derivative) control is one of the wide used control strategies in real world. The input for the controller is cross track error(cte). The simulator will provide this input as the car drive along the track. Assuming the cte is the distance between center of the car to center of the road. No lookahead or lookback. The simulator also provide speed and steering angle as available input,delta time can be calculated as well. The design goal for the PID controller is to provide stable steering and speed command to simulator. The controllor should drive around the lake side circle without danger movement or accident free.    
 
-The PID as the name says, it has three parts, proportional term, integral term and derivative term. Each term has their own behaviour. 
+The PID as the name says, it has three terms, proportional term, integral term and derivative term. Each term has their own behaviour. 
 
 ## Proportional
 The p term takes cte as input, calculate the `p_error = cte`; Depend on the output range and tuning requirement, the cte range may not match the output range, we need apply a linear Coefficient Kp to the p_error. Therefore the proportional term is respons linearly to the input cte. 
@@ -52,10 +52,56 @@ By far, all testing is done on one dimensional signal, one set of PID coefficien
 ## Speed
 
 Can a simple PID controller be tuned for variable speed? [https://www.youtube.com/watch?v=Zij2BDvc8y0&t=27s]
+As the video showning, if the PID controller is tuned at low speed, say 10mph, once the car reachs high speed, say 80mph, and the car only sensing the center line by looking down to get the cross track error. At the sharp turn, the cte rate of change may be too large, it will knock the car out of balance very quickly. Also, at high speed, small change in steering angle can cause a big swing as well. 
+
+Since the simulator provides the valuable speed information, I am going to play with it. I used the speed in three places. 
+1. I applied the `p_error = cte/speed;` insteed of `p_error = cte;` . So the P term behaviour chanaged. At low speed, it is sensitive to the cte, but at high speed, it is less sensitive to cte. It give the car some ability to self center itself. That is a desired feature. 
+
+2. I applied the `d_error = diff_cte/ (speed*speed);` insteed of `d_error = diff_cte/delta_t;`. It is same idea in the P term,  but I want d term much less sensitive on high speed. The delta_t is close to a constant numberso I just took it out, the Kd will cover it. 
+
+3. I applied `speed_value = -0.3 + 120/fabs(speed*angle);` on throttle input. It behaviours like: 
+At High speed, small steering angle, full throttle; large steering angle(sharp turn, emergancy), reduced the throttle input, at certain point, negative throttle, means brake.   
+At low speed, any angle, any positive throttle allowed.
 
 ## Smoothing
 
+In simulator or real world, smoother steering is desired. I used three metholds together to smooth out the steering.
+
+1. Build in self centering ability in the PID controller. As descributed in speed section, the controller is more stable at higher speed, it will take large cte to knock it out of balance.
+   
+2. Fine tuning the PID controller. There are the steps how I tuned the PID coefficients. 
+
+First, P term only, adjust the Kp, until the p_error in between 0.001 to 0.5 at low speed. The car should be able to follow the track with huge swing. 
+Second, open the D term, adjust the Kd, until the d_error in between 0.001 to 0.5 at low speed, The car will be more smoother than P alone. 
+Third, apply very small Ki, such as 0.001, see anything changes. I end up with Ki = 0.0051, and i_error always around 0.4, because of the car makes more left turns than right turns on this track.  
+
+3. Apply rolling average to the steering output
+
+I applied appoximate rolling average to the steering output as well. The averaging number from 1 to 8. 
+If number = 1, means no averaging, same steering output value send to the simulator.
+If higher number, the weight averaged steering output value send to the simulator. 
+The car behaviours really really stable at high speed, I can reach 90 mph on the bridge, but the car is not able to make the sharp turn. Also, the car is more sensitive at lower speed. Therefore, I designed a shifting feature, It work like this:
+1. Start at number 1, as the car rolling, it will shift the averaging number 1 by 1 to the maximum number. The car is stablized. 
+2. Conjunction with cte, speed and angle measurement, if the car reaches a big turn, the car will apply brake, reduce the speed, drop the averaging number to 1, bring up the sensitive, the P term will figure out the sharp angle to make the turn. 
+3. Then the D term will balancing out the steering output. the averaging number will rise again, the car is going to new stable stage again. 
+
+
 ## Reflection
+
+The above discussion sounds lot of activities involved, but implemtation is quit simple. I think that is why PID is a propular controller. The PID controller is easy to build, not so easy to tune. 
+
+At fixed speed, it is possible to find the optimal parameter Kp, Ki, and Kd, it will take about 20 - 30 inputs, at least one or two wave length to stablize. 
+
+For variable speed, I tried my way to tune the parameter with speed and steering together. The limitation is the way we sensing the cte. If I can look ahead 1-3 seconds on the road, it can achieve both higher speed and stable run. 
+
+Based on current setting, The PID controller still useful for speed up to 50 MPH, max 70 MPH[https://www.youtube.com/watch?v=9njADnlCY7I]. The car still swing. It actually need to swing in order to sensing the sharp turns. Once the turn is detected, the combination of reaction will take place, brake, down shift, turn, up shift again.        
+
+I did a reverse gear run on the track at 30 MPH[https://www.youtube.com/watch?v=40yiQtKU9ao], it is stable like on train track most of the time.  
+
+In conclusion, this project is a reactive PID controller. It is a great eye openner to taste the challenge in self-driving car. I am looking forward to see an improved simulator with look ahead sensing, and different tracks. I also want to check how the current on the market PID controller is tuned.   
+
+
+
 
 ## Dependencies
 
