@@ -57,9 +57,10 @@ std::string hasData(std::string s) {
 
 //std::vector<double> p = {2.3, 0.0051, 0.55, 1, 1, 15, 1500}; // initial params works
 //std::vector<double> p = {2.3, 0.0051, 2.55, 1, 1, 15, 1500}; // initial params works too
-std::vector<double> p = {5.3, 0.0051, 4.55, 1, 5, 15, 1500}; // initial params survived
+std::vector<double> p = {4.7, 0.00481, 4.55, 1, 5, 15, 1500}; // initial params survived
 //std::vector<double> p = {7.3, 0.0051, 4.55, 1, 7, 15, 1500}; // initial params ok
 //std::vector<double> p = {7.8, 0.0051, 4.55, 1, 8, 15, 1500}; // initial params ok
+//std::vector<double> p = {0.01, 0.0051, 4.55, 1, 25, 15, 1500}; // initial params does not work
 
 
 
@@ -169,7 +170,7 @@ int main()
             }
           }
           
-          steering_value = - pid.TotalError();
+          steering_value = pid.TotalError();
           steering_value = approxRollingAverage(steering_avg, steering_value, N);
           
           if (fabs(cte/delta_t)> p[6]){ // err over threshold
@@ -182,7 +183,7 @@ int main()
           
           json msgJson;
           msgJson["steering_angle"] = steering_value;
-          msgJson["throttle"] = speed_value;
+          msgJson["throttle"] = speed_value*0.5;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           //std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);

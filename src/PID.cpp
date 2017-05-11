@@ -51,7 +51,7 @@ void PID::UpdateError(double cte, double dt, double diff,double velo) {
 
 
 double PID::TotalError() {
-  return Kp * p_error + Ki * i_error + Kd * d_error;
+  return -Kp * p_error - Ki * i_error - Kd * d_error;
 
 }
 
