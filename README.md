@@ -32,15 +32,17 @@ If we put all three controller together, it will look like this.
 <p align="center">
  <img src="./img/init_pid.png" width="720">
 </p>
-
+It looks all right, the car return to the center line with little some swing, it take about 80 steps to achieve that. 
+By manually tuning the PID coefficients, we can make the controller react quickly for just about 60 steps. 
 <p align="center">
  <img src="./img/pid_controller.png" width="720">
 </p>
-
+By doing a machine tuning, such as "twiddle", find the best P,I,D coefficients combination, the controller can reach the stable stage at just 30 steps. 
 <p align="center">
  <img src="./img/tuned_pid.png" width="720">
 </p>
 ## Speed
+
 ## Smoothing
 ## Reflection
 
