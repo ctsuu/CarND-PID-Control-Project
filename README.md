@@ -26,7 +26,7 @@ It also need a linear Coefficient Kd to match the signal level and turning. Conj
 
 ## Integral
 
-In reality, any control system will have some miss aligment, random noise and drift. The Integral term is to compensate this issue. The `i_error += cte`; We add all cte together, is the car is perfectly positioned, the cte from  left and right will cancel themself out. If the car is imperfect, we always need apply force on one side to keep it centered. So the sum of the cte can provide this input, we multiply a linear Coefficient Ki to match level and tuning. 
+In reality, any control system will have some miss aligment, random noise and drift. The Integral term is to compensate this issue. The `i_error += cte`; We add all cte together, if the car is perfectly positioned, the cte from  left and right will cancel themself out. If the car is imperfect, we always need apply force on one side to keep it centered. So the sum of the cte can provide this input, we multiply a linear Coefficient Ki to match level and tuning. 
 Conjunction with P controller, it behaviours like this.
 <p align="center">
  <img src="./img/tuned_pi.png" width="720">
@@ -48,7 +48,7 @@ By doing a machine tuning, such as "twiddle", find the best P,I,D coefficients c
 <p align="center">
  <img src="./img/tuned_pid.png" width="720">
 </p>
-By far, all testing is done on one dimensional signal, one set of PID coefficients can do this job. But the simplified car is driven on 2 dimensional space, how can we do PID controller on different speed? 
+By far, all testing is done on one dimensional signal, one set of PID coefficients can do this job. But the simplified car model is driven on 2 dimensional space, how can we do PID controller on different speed? 
 
 ## Speed
 
