@@ -53,7 +53,7 @@ By far, all testing is done on one dimensional signal, one set of PID coefficien
 ## Speed
 
 Can a simple PID controller be tuned for variable speed? [https://www.youtube.com/watch?v=Zij2BDvc8y0&t=27s]
-As the video showning, if the PID controller is tuned at low speed, say 10mph, once the car reachs high speed, say 80mph, and the car only sensing the center line by looking down to get the cross track error. At the sharp turn, the cte rate of change may be too large, it will knock the car out of balance very quickly. Also, at high speed, small change in steering angle can cause a big swing as well. 
+As the video showning, if the PID controller is tuned at low speed, say 10mph, once the car reachs high speed, say 80mph, and the car only sensing the center line by looking down to get the cross track error. At the sharp turn, the cte rate of change may be too large, it will knock the car out of balance very quickly[https://www.youtube.com/watch?v=91LY-1e-lmU]. Also, at high speed, small change in steering angle can cause a big swing as well. 
 
 Since the simulator provides the valuable speed information, I am going to play with it. I used the speed in three places. 
 1. I applied the `p_error = cte/speed;` insteed of `p_error = cte;` . So the P term behaviour chanaged. At low speed, it is sensitive to the cte, but at high speed, it is less sensitive to cte. It give the car some ability to self center itself. That is a desired feature. 
@@ -72,8 +72,10 @@ In simulator or real world, smoother steering is desired. I used three metholds 
    
 2. Fine tuning the PID controller. There are the steps how I tuned the PID coefficients. 
 
-First, P term only, adjust the Kp, until the p_error in between 0.001 to 0.5 at low speed. The car should be able to follow the track with huge swing. 
-Second, open the D term, adjust the Kd, until the d_error in between 0.001 to 0.5 at low speed, The car will be more smoother than P alone. 
+First, P term only, adjust the Kp, until the p_error in between 0.001 to 0.5 at low speed. The car should be able to follow the track with huge swing. [https://www.youtube.com/watch?v=72x0ZC2btRI&t=46s]
+
+Second, open the D term, adjust the Kd, until the d_error in between 0.001 to 0.5 at low speed, The car will be more smoother than P alone. [https://www.youtube.com/watch?v=Zij2BDvc8y0]
+
 Third, apply very small Ki, such as 0.001, see anything changes. I end up with Ki = 0.0051, and i_error always around 0.4, because of the car makes more left turns than right turns on this track.  
 
 3. Apply rolling average to the steering output
